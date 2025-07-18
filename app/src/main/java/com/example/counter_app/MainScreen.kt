@@ -24,9 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.counter_app.ui.theme.CounterappTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    MainContent()
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainContent() {
     var counter by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -40,7 +45,9 @@ fun MainScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { counter++ }) {
+            FloatingActionButton(
+                onClick = { counter++ },
+            ) {
                 Icon(Icons.Filled.Add, "Increment counter")
             }
         },
@@ -51,7 +58,7 @@ fun MainScreen() {
                 .fillMaxSize()
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "You have pushed the button this many times:",
@@ -64,21 +71,10 @@ fun MainScreen() {
     }
 }
 
-@Composable
-private fun Greeting(
-    name: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
-private fun GreetingPreview() {
+private fun MainContentPreview() {
     CounterappTheme {
-        Greeting("Android")
+        MainContent()
     }
 }
