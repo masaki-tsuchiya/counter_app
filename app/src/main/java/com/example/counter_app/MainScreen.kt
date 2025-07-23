@@ -27,10 +27,10 @@ import com.example.counter_app.ui.theme.CounterappTheme
 fun MainScreen(
     viewModel: MainViewModel = viewModel(),
 ) {
-    val counter by viewModel.counter.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     MainContent(
-        counter = counter,
+        counter = uiState.counter,
         updateCounter = {
             viewModel.updateCounter()
         },

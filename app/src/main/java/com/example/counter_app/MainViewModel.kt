@@ -1,15 +1,34 @@
 package com.example.counter_app
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val mainRepository: MainRepository = MainRepository(),
+) : ViewModel() {
 
-    private val _counter = MutableStateFlow(0)
-    val counter = _counter.asStateFlow()
+    private val _uiState = MutableStateFlow(MainUiState())
+    val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            mainRepository.counter.collect { counter ->
+                _uiState.update {
+                    it.copy(
+                        counter = counter,
+                    )
+                }
+            }
+        }
+    }
 
     fun updateCounter() {
-        _counter.value += 1
+        mainRepository.updateCounter(
+            counter = 1,
+        )
     }
 }
