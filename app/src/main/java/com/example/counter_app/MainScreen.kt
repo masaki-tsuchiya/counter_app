@@ -15,25 +15,34 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.counter_app.ui.theme.CounterappTheme
 
 @Composable
-fun MainScreen() {
-    MainContent()
+fun MainScreen(
+    viewModel: MainViewModel = viewModel(),
+) {
+    val counter by viewModel.counter.collectAsState()
+
+    MainContent(
+        counter = counter,
+        updateCounter = {
+            viewModel.updateCounter()
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainContent() {
-    var counter by remember { mutableIntStateOf(0) }
-
+private fun MainContent(
+    counter: Int,
+    updateCounter: () -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -46,7 +55,7 @@ private fun MainContent() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { counter++ },
+                onClick = updateCounter,
             ) {
                 Icon(Icons.Filled.Add, "Increment counter")
             }
@@ -75,6 +84,9 @@ private fun MainContent() {
 @Composable
 private fun MainContentPreview() {
     CounterappTheme {
-        MainContent()
+        MainContent(
+            counter = 0,
+            updateCounter = {},
+        )
     }
 }
